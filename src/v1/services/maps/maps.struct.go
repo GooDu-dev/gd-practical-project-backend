@@ -7,6 +7,7 @@ type GetMapRequest struct {
 
 type GetMapResponse struct {
 	ID         int    `json:"floor_id"`
+	Name       string `json:"floor_name"`
 	Rooms      []Area `json:"rooms"`
 	DangerZone []Area `json:"danger_zone"`
 	SizeX      int    `json:"size_x"`
@@ -14,10 +15,11 @@ type GetMapResponse struct {
 }
 
 type FloorData struct {
-	FloorID    int `json:"floor_id"`
-	SizeX      int `json:"size_x"`
-	SizeY      int `json:"size_y"`
-	BuildingID int `json:"building_id"`
+	FloorID    int    `json:"floor_id"`
+	FloorName  string `json:"floor_name"`
+	SizeX      int    `json:"size_x"`
+	SizeY      int    `json:"size_y"`
+	BuildingID int    `json:"building_id"`
 }
 
 type Area struct {
@@ -27,6 +29,5 @@ type Area struct {
 	Longitude string `json:"longitude"`
 	Width     int    `json:"width"`
 	Height    int    `json:"height"`
-	Floor     string `json:"floor"`
 	AreaType  string `json:"area_type"`
 }

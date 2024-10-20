@@ -14,7 +14,7 @@ func (m *SearchModel) InitModel() *SearchModel {
 	return &SearchModel{}
 }
 
-func (m *SearchModel) GetRoomDetails(building_id int, area_id int, floor *int) (*Building, error) {
+func (m *SearchModel) GetRoomDetails(room_id int) (*Building, error) {
 
 	response := []SearchResponse{}
 
@@ -36,12 +36,8 @@ func (m *SearchModel) GetRoomDetails(building_id int, area_id int, floor *int) (
 		Joins("INNER JOIN tb_area ON tb_building.id = tb_area.building_id").
 		Joins("INNER JOIN tb_area_type ON tb_area.area_type_id = tb_area_type.id").
 		Joins("INNER JOIN tb_floor ON tb_area.floor_id = tb_floor.id").
-		Where("tb_building.id = ? AND tb_area.id = ?", building_id, area_id).
+		Where("tb_area.id = ? AND tb_area_type.id = 1", room_id).
 		Find(&response)
-
-	if !common.IsDefaultValueOrNil(floor) {
-		result.Where("tb_area.floor_id = ?", floor).Find(&response)
-	}
 
 	if result.Error != nil {
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), result.Error)
@@ -137,7 +133,7 @@ func (m *SearchModel) GetFloorSearchList(building_id int) (_ *[]FloorSearchList,
 
 	result := database.DB.Table("tb_floor").
 		Select(
-			"tb_floor.id as floor_id",
+			"tb_floor.id as id",
 			"tb_floor.name as floor",
 		).
 		Where("tb_floor.building_id = ?", building_id).

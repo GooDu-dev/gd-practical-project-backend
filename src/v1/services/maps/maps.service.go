@@ -39,6 +39,7 @@ func (s *MapService) GetMap(request GetMapRequest) (response *GetMapResponse, er
 
 	response = &GetMapResponse{
 		ID:         floor_data.FloorID,
+		Name:       floor_data.FloorName,
 		Rooms:      *rooms,
 		DangerZone: *dangerZone,
 		SizeX:      floor_data.SizeX,

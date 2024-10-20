@@ -24,23 +24,7 @@ func NewEndPoint() *SearchEndPoint {
 
 func (e *SearchEndPoint) GetRoomDetails(c *gin.Context) {
 
-	building := c.Query("building")
-	floor := c.Query("floor")
 	room := c.Query("room")
-
-	building_id, err := strconv.Atoi(building)
-	if err != nil {
-		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
-		status, res := customError.InvalidRequestError.ErrorResponse()
-		c.JSON(status, res)
-		return
-	}
-	if common.IsDefaultValueOrNil(building_id) {
-		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), map[string]int{"building_id": building_id})
-		status, res := customError.MissingRequestError.ErrorResponse()
-		c.JSON(status, res)
-		return
-	}
 
 	room_id, err := strconv.Atoi(room)
 	if err != nil {
@@ -56,19 +40,8 @@ func (e *SearchEndPoint) GetRoomDetails(c *gin.Context) {
 		return
 	}
 
-	var floor_id *int
-	if _floor, err := strconv.Atoi(floor); err != nil {
-		log.Logging(utils.INFO_LOG, common.GetFunctionWithPackageName(), err)
-	} else if _floor == 0 {
-		floor_id = nil
-	} else {
-		floor_id = &_floor
-	}
-
 	request := SearchRequest{
-		BuildingID: building_id,
-		Floor:      floor_id,
-		RoomID:     room_id,
+		RoomID: room_id,
 	}
 
 	var response *Building
