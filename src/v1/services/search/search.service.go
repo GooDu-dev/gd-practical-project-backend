@@ -20,7 +20,7 @@ func (s *SearchService) InitService() *SearchService {
 func (s *SearchService) GetRoomDetails(request SearchRequest) (_ *Building, err error) {
 	var response *Building
 
-	if response, err = s.Model.GetRoomDetails(request.BuildingID, request.RoomID, request.Floor); err != nil {
+	if response, err = s.Model.GetRoomDetails(request.RoomID); err != nil {
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
 		return nil, err
 	}

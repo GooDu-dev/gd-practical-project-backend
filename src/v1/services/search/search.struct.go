@@ -1,9 +1,7 @@
 package search
 
 type SearchRequest struct {
-	BuildingID int  `json:"building"`
-	Floor      *int `json:"floor"`
-	RoomID     int  `json:"room"`
+	RoomID int `json:"room"`
 }
 
 type SearchResponse struct {

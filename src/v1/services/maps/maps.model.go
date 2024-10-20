@@ -27,11 +27,9 @@ func (m *MapModel) GetAreasZone(building_id int, floor int) (*[]Area, error) {
 			"tb_area.longitude as longitude",
 			"tb_area.width as width",
 			"tb_area.height as height",
-			"tb_floor.name as floor",
 			"tb_area_type.name as area_type",
 		).
 		Joins("INNER JOIN tb_area_type ON tb_area.area_type_id = tb_area_type.id").
-		Joins("INNER JOIN tb_floor ON tb_area.floor_id = tb_floor.id").
 		Where("tb_area.building_id = ? AND tb_area.floor_id = ? AND tb_area.area_type_id = 1", building_id, floor).
 		Find(&response)
 
@@ -56,11 +54,9 @@ func (m *MapModel) GetDangerZone(building_id int, floor int) (*[]Area, error) {
 			"tb_area.longitude as longitude",
 			"tb_area.width as width",
 			"tb_area.height as height",
-			"tb_floor.name as floor",
 			"tb_area_type.name as area_type",
 		).
 		Joins("INNER JOIN tb_area_type ON tb_area.area_type_id = tb_area_type.id").
-		Joins("INNER JOIN tb_floor ON tb_area.floor_id = tb_floor.id").
 		Where("tb_area.building_id = ? AND tb_area.floor_id = ? AND tb_area.area_type_id = 2", building_id, floor).
 		Find(&response)
 
@@ -78,6 +74,7 @@ func (m *MapModel) GetFloorData(floor int) (*FloorData, error) {
 	result := database.DB.Table("tb_floor").
 		Select(
 			"tb_floor.id as floor_id",
+			"tb_floor.name as floor_name",
 			"tb_floor.x as size_x",
 			"tb_floor.y as size_y",
 			"tb_floor.building_id as building_id",
