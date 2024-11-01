@@ -99,10 +99,10 @@ func (r Router) InitRouter() http.Handler {
 
 	ro := gin.Default()
 	ro.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://gd-practical-project-frontend-alpha.vercel.app"},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE"},
 		AllowHeaders:     []string{utils.CONTENT_TYPE, utils.CONTENT_CODE, utils.ACCESS_CONTROL, utils.SOURCE_CONTROL},
-		AllowCredentials: true,
+		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}))
 
