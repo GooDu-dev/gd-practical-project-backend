@@ -99,10 +99,11 @@ func (r Router) InitRouter() http.Handler {
 
 	ro := gin.Default()
 	ro.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"*", "https://gd-practical-project-frontend-alpha.vercel.app"},
-		AllowMethods: []string{"GET", "POST", "PATCH", "DELETE"},
-		AllowHeaders: []string{utils.CONTENT_TYPE, utils.CONTENT_CODE, utils.ACCESS_CONTROL, utils.SOURCE_CONTROL},
-		MaxAge:       12 * time.Hour,
+		AllowOrigins:     []string{"*", "https://gd-practical-project-frontend-alpha.vercel.app"},
+		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowHeaders:     []string{utils.CONTENT_TYPE, utils.CONTENT_CODE, utils.ACCESS_CONTROL, utils.SOURCE_CONTROL},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
 	}))
 
 	mainRoute := ro.Group(utils.PATH)
