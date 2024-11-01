@@ -17,15 +17,52 @@ func (s *SearchService) InitService() *SearchService {
 	}
 }
 
-func (s *SearchService) GetRoomDetails(request SearchRequest) (_ *Building, err error) {
+func (s *SearchService) GetRoomDetails(request AreaDetailsRequest) (_ *Building, err error) {
 	var response *Building
+	var area_type_room int = 1
 
-	if response, err = s.Model.GetRoomDetails(request.RoomID); err != nil {
+	if response, err = s.Model.GetAreaDetails(request.AreaID, area_type_room); err != nil {
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
 		return nil, err
 	}
 
 	return response, nil
+}
+
+func (s *SearchService) GetBoothDetails(request AreaDetailsRequest) (_ *Building, err error) {
+	var response *Building
+	var area_type_booth int = 3
+
+	if response, err = s.Model.GetAreaDetails(request.AreaID, area_type_booth); err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		return nil, err
+	}
+
+	return response, nil
+}
+
+func (s *SearchService) GetRestroomDetails(request AreaDetailsRequest) (_ *Building, err error) {
+	var response *Building
+	var area_type_restroom int = 6
+
+	if response, err = s.Model.GetAreaDetails(request.AreaID, area_type_restroom); err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		return nil, err
+	}
+
+	return response, err
+}
+
+func (s *SearchService) GetConnectorDetails(request AreaDetailsRequest) (_ *Building, err error) {
+	var response *Building
+	var area_type_connector int = 4
+
+	if response, err = s.Model.GetAreaDetails(request.AreaID, area_type_connector); err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		return nil, err
+	}
+
+	return response, err
 }
 
 func (s *SearchService) GetRoomSearchListFromBuilding(request BuildingSearchRequest) (_ *[]RoomNameSearchList, err error) {

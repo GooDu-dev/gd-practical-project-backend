@@ -87,6 +87,14 @@ func (r Router) InitRouter() http.Handler {
 			Validation:  validator.NoValidation,
 			Endpoint:    mapEndpoint.GetMap,
 		},
+		{
+			Name:        "[GET] Get floor boundaries",
+			Description: "Get lat and lng of 4 cornors in specified floor",
+			Method:      http.MethodGet,
+			Path:        "/maps/bounds/gis",
+			Validation:  validator.NoValidation,
+			Endpoint:    mapEndpoint.GetFloorBound,
+		},
 	}
 
 	ro := gin.Default()

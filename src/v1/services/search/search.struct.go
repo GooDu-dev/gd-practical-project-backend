@@ -1,7 +1,7 @@
 package search
 
-type SearchRequest struct {
-	RoomID int `json:"room"`
+type AreaDetailsRequest struct {
+	AreaID int `json:"area"`
 }
 
 type SearchResponse struct {
@@ -19,6 +19,9 @@ type SearchResponse struct {
 	AreaFloor         string `json:"area_floor"`
 	AreaTypeID        int    `json:"area_type_id"`
 	AreaType          string `json:"area_type"`
+	InAreaID          *int   `json:"in_area_id"`
+	AreaX             int    `json:"x"`
+	AreaY             int    `json:"y"`
 }
 
 type Building struct {
@@ -38,6 +41,9 @@ type Area struct {
 	Height    int             `json:"height"`
 	Floor     FloorSearchList `json:"floor"`
 	AreaType  string          `json:"area_type"`
+	InAreaID  *int            `json:"in_area_id"`
+	AreaX     int             `json:"x" gorm:"column:area_x"`
+	AreaY     int             `json:"y" gorm:"column:area_y"`
 }
 
 type BuildingSearchRequest struct {

@@ -17,6 +17,10 @@ type AreaModel struct {
 	AreaTypeID uint
 	AreaType   AreaTypeModel `gorm:"foreignKey:AreaTypeID"`
 	Name       string        `gorm:"index:uniqueIndex; type:varchar(24)"`
+	X          int           `gorm:"index:uniqueIndex"`
+	Y          int           `gorm:"index:uniqueIndex"`
+	InAreaID   *int
+	AreaFK     *AreaModel `gorm:"foreignKey:InAreaID"`
 }
 
 type AreaTypeModel struct {
