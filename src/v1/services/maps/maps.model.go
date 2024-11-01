@@ -62,7 +62,7 @@ func (m *MapModel) GetUnwalkableZone(building_id int, floor_id int) (*[]Area, er
 			"tb_area.y as y",
 		).
 		Joins("INNER JOIN tb_area_type ON tb_area.area_type_id = tb_area_type.id").
-		Where("tb_area.building_id = ? AND tb_area.floor_id = ? AND tb_area.area_type_id != 1 AND tb_area.area_type_id != 7", building_id, floor_id).
+		Where("tb_area.building_id = ? AND tb_area.floor_id = ? AND tb_area.area_type_id != 1 AND tb_area.area_type_id != 7 AND tb_area.area_type_id != 3", building_id, floor_id).
 		Find(&response)
 
 	if result.Error != nil {
