@@ -27,8 +27,6 @@ WORKDIR /root/
 
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app/main .
-# Copy .env file (if required)
-COPY .env .env
 
 # Expose the port the app runs on
 EXPOSE 8080
