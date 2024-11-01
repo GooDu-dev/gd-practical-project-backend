@@ -3,7 +3,7 @@ package utils
 const (
 	CONTENT_TYPE   string = "Content-Type"
 	CONTENT_CODE   string = "X-Content-Code"
-	ACCESS_CONTROL string = "Access-Control-Allow-Origin"
+	ACCESS_CONTROL string = "X-Access-Ctrl"
 	SOURCE_CONTROL string = "X-Source"
 
 	PATH        string = "/api"
