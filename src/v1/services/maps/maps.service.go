@@ -102,3 +102,15 @@ func (s *MapService) GetFloorBound(floor_id int) (response *GetFloorBoundRespons
 
 	return response, nil
 }
+
+func (s *MapService) GetBooths(request GetMapRequest) (response *[]Area, err error) {
+
+	var area_type_booth int = 3
+	response, err = s.model.GetAreasZone(request.BuildingID, request.Floor, area_type_booth)
+	if err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		return nil, err
+	}
+
+	return response, err
+}

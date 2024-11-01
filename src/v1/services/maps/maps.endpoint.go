@@ -108,3 +108,41 @@ func (e *MapEndpoint) GetFloorBound(c *gin.Context) {
 	log.Logging(utils.INFO_LOG, common.GetFunctionWithPackageName(), response)
 	c.JSON(http.StatusOK, response)
 }
+
+func (e *MapEndpoint) GetBooths(c *gin.Context) {
+
+	building := c.Query("building")
+	floor := c.Query("floor")
+
+	building_id, err := strconv.Atoi(building)
+	if err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		status, res := customError.InvalidRequestError.ErrorResponse()
+		c.JSON(status, res)
+		return
+	}
+
+	floor_id, err := strconv.Atoi(floor)
+	if err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		status, res := customError.InvalidRequestError.ErrorResponse()
+		c.JSON(status, res)
+		return
+	}
+
+	request := GetMapRequest{
+		BuildingID: building_id,
+		Floor:      floor_id,
+	}
+
+	response, err := e.Service.GetBooths(request)
+	if err != nil {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
+		status, res := customError.GetErrorResponse(err)
+		c.JSON(status, res)
+		return
+	}
+
+	log.Logging(utils.INFO_LOG, common.GetFunctionWithPackageName(), response)
+	c.JSON(http.StatusOK, response)
+}

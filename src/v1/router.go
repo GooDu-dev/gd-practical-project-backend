@@ -95,6 +95,14 @@ func (r Router) InitRouter() http.Handler {
 			Validation:  validator.NoValidation,
 			Endpoint:    mapEndpoint.GetFloorBound,
 		},
+		{
+			Name:        "[GET] Get all booths in maps",
+			Description: "Get all booths in given building_id and floor_id",
+			Method:      http.MethodGet,
+			Path:        "/maps/booths",
+			Validation:  validator.NoValidation,
+			Endpoint:    mapEndpoint.GetBooths,
+		},
 	}
 
 	ro := gin.Default()
