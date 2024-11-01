@@ -14,7 +14,7 @@ func (m *SearchModel) InitModel() *SearchModel {
 	return &SearchModel{}
 }
 
-func (m *SearchModel) GetRoomDetails(room_id int) (*Building, error) {
+func (m *SearchModel) GetAreaDetails(area_id int, area_type_id int) (*Building, error) {
 
 	response := []SearchResponse{}
 
@@ -29,6 +29,9 @@ func (m *SearchModel) GetRoomDetails(room_id int) (*Building, error) {
 			"tb_area.longitude as area_longitude",
 			"tb_area.width as area_width",
 			"tb_area.height as area_height",
+			"tb_area.in_area_id as in_area_id",
+			"tb_area.x as area_x",
+			"tb_area.y as area_y",
 			"tb_floor.id as area_floor_id",
 			"tb_floor.name as area_floor",
 			"tb_area.area_type_id as area_type_id",
@@ -36,17 +39,12 @@ func (m *SearchModel) GetRoomDetails(room_id int) (*Building, error) {
 		Joins("INNER JOIN tb_area ON tb_building.id = tb_area.building_id").
 		Joins("INNER JOIN tb_area_type ON tb_area.area_type_id = tb_area_type.id").
 		Joins("INNER JOIN tb_floor ON tb_area.floor_id = tb_floor.id").
-		Where("tb_area.id = ? AND tb_area_type.id = 1", room_id).
+		Where("tb_area.id = ? AND tb_area_type.id = ?", area_id, area_type_id).
 		Find(&response)
 
 	if result.Error != nil {
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), result.Error)
 		return nil, customError.InternalServerError
-	}
-
-	if len(response) < 1 {
-		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), "There is no content in database")
-		return nil, customError.ContentNotFoundError
 	}
 
 	output := Building{
@@ -70,6 +68,9 @@ func (m *SearchModel) GetRoomDetails(room_id int) (*Building, error) {
 				Floor: res.AreaFloor,
 			},
 			AreaType: res.AreaType,
+			InAreaID: res.InAreaID,
+			AreaX:    res.AreaX,
+			AreaY:    res.AreaY,
 		})
 	}
 
@@ -95,11 +96,6 @@ func (m *SearchModel) GetRoomSearchListFromBuilding(id int) (_ *[]RoomNameSearch
 		return nil, customError.InternalServerError
 	}
 
-	if len(response) < 1 {
-		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), "No data in database")
-		return nil, customError.ContentNotFoundError
-	}
-
 	return &response, nil
 
 }
@@ -120,11 +116,6 @@ func (m *SearchModel) GetBuildingSearchList(count int) (_ *[]BuildingSearchList,
 		return nil, customError.InternalServerError
 	}
 
-	if len(response) < 1 {
-		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), "No data in database")
-		return nil, customError.ContentNotFoundError
-	}
-
 	return &response, nil
 }
 
@@ -143,10 +134,6 @@ func (m *SearchModel) GetFloorSearchList(building_id int) (_ *[]FloorSearchList,
 	if result.Error != nil {
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), result.Error)
 		return nil, result.Error
-	}
-
-	if len(response) < 1 {
-		return nil, customError.ContentNotFoundError
 	}
 
 	return &response, nil

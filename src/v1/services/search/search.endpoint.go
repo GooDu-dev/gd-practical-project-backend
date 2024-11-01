@@ -24,28 +24,67 @@ func NewEndPoint() *SearchEndPoint {
 
 func (e *SearchEndPoint) GetRoomDetails(c *gin.Context) {
 
-	room := c.Query("room")
+	params := map[string]string{
+		"room":      c.Query("room"),
+		"restroom":  c.Query("restroom"),
+		"booth":     c.Query("booth"),
+		"connector": c.Query("connector"),
+	}
 
-	room_id, err := strconv.Atoi(room)
+	var selectedParam, selectedValue string
+
+	for key, value := range params {
+		if value != "" {
+			if selectedParam != "" {
+				log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), params)
+				status, res := customError.InvalidRequestError.ErrorResponse()
+				c.JSON(status, res)
+				return
+			}
+			selectedParam = key
+			selectedValue = value
+		}
+	}
+
+	if common.IsDefaultValueOrNil(selectedParam) {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), map[string]string{"params": selectedParam})
+		status, res := customError.MissingRequestError.ErrorResponse()
+		c.JSON(status, res)
+		return
+	}
+
+	id, err := strconv.Atoi(selectedValue)
 	if err != nil {
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), err)
 		status, res := customError.InvalidRequestError.ErrorResponse()
 		c.JSON(status, res)
 		return
 	}
-	if common.IsDefaultValueOrNil(room_id) {
-		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), map[string]int{"room_id": room_id})
+	if common.IsDefaultValueOrNil(id) {
+		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), map[string]int{"id": id})
 		status, res := customError.MissingRequestError.ErrorResponse()
 		c.JSON(status, res)
 		return
 	}
 
-	request := SearchRequest{
-		RoomID: room_id,
+	request := AreaDetailsRequest{
+		AreaID: id,
 	}
 
 	var response *Building
-	if response, err = e.Services.GetRoomDetails(request); err != nil {
+
+	switch selectedParam {
+	case "room":
+		response, err = e.Services.GetRoomDetails(request)
+	case "booth":
+		response, err = e.Services.GetBoothDetails(request)
+	case "restroom":
+		response, err = e.Services.GetRestroomDetails(request)
+	case "connector":
+		response, err = e.Services.GetConnectorDetails(request)
+	}
+
+	if err != nil {
 		status, res := customError.GetErrorResponse(err)
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), res)
 		c.JSON(status, res)
