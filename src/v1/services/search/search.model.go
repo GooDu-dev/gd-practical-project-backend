@@ -46,6 +46,9 @@ func (m *SearchModel) GetAreaDetails(area_id int, area_type_id int) (*Building, 
 		log.Logging(utils.EXCEPTION_LOG, common.GetFunctionWithPackageName(), result.Error)
 		return nil, customError.InternalServerError
 	}
+	if len(response) == 0 {
+		return nil, customError.ContentNotFoundError
+	}
 
 	output := Building{
 		ID:         response[0].BuildingID,
@@ -88,7 +91,7 @@ func (m *SearchModel) GetRoomSearchListFromBuilding(id int) (_ *[]RoomNameSearch
 		).
 		Joins("INNER JOIN tb_building ON tb_area.building_id = tb_building.id").
 		Joins("INNER JOIN tb_floor ON tb_area.floor_id = tb_floor.id").
-		Where("tb_building.id = ? AND tb_area.area_id_type = 3", id).
+		Where("tb_building.id = ? AND tb_area.area_type_id = 3", id).
 		Find(&response)
 
 	if result.Error != nil {
