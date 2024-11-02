@@ -88,7 +88,7 @@ func (m *SearchModel) GetRoomSearchListFromBuilding(id int) (_ *[]RoomNameSearch
 		).
 		Joins("INNER JOIN tb_building ON tb_area.building_id = tb_building.id").
 		Joins("INNER JOIN tb_floor ON tb_area.floor_id = tb_floor.id").
-		Where("tb_building.id = ?", id).
+		Where("tb_building.id = ? AND tb_area.tb_area_id = 3", id).
 		Find(&response)
 
 	if result.Error != nil {
